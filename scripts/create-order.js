@@ -5,7 +5,8 @@ const penawaranId = Number(process.argv[3] ?? 1);
 const kuantitas = Number(process.argv[4] ?? 1);
 
 if (!Number.isInteger(penawaranId) || !Number.isInteger(kuantitas) || kuantitas < 1) {
-  console.error("penawaranId dan kuantitas harus berupa bilangan bulat positif.");
+
+console.error("penawaranId dan kuantitas harus berupa bilangan bulat positif.");
   process.exitCode = 1;
 } else {
   let client;
@@ -36,9 +37,7 @@ if (!Number.isInteger(penawaranId) || !Number.isInteger(kuantitas) || kuantitas 
     if (item.status !== "aktif" || new Date(item.berakhir_pada) <= new Date()) {
       throw new Error("Penawaran tidak aktif atau sudah kedaluwarsa.");
     }
-    if (item.stok < kuantitas) {
-      throw new Error(`Stok ${item.nama} tidak mencukupi.`);
-    }
+    if (item.stok < kuantitas) throw new Error(`Stok ${item.nama} tidak mencukupi.`);
 
     const pesanan = await client.query(
       `INSERT INTO pesanan (pembeli_id, penyedia_id)
@@ -53,14 +52,8 @@ if (!Number.isInteger(penawaranId) || !Number.isInteger(kuantitas) || kuantitas 
          pesanan_id, penawaran_id, penyedia_id, kuantitas,
          harga_normal_satuan, harga_penawaran_satuan
        ) VALUES ($1, $2, $3, $4, $5, $6)`,
-      [
-        pesananId,
-        item.id,
-        item.penyedia_id,
-        kuantitas,
-        item.harga_normal,
-        item.harga_penawaran
-      ]
+      [pesananId, item.id, item.penyedia_id, kuantitas,
+       item.harga_normal, item.harga_penawaran]
     );
 
     await client.query(
@@ -83,7 +76,6 @@ if (!Number.isInteger(penawaranId) || !Number.isInteger(kuantitas) || kuantitas 
 
     await client.query("COMMIT");
     transaksiDimulai = false;
-
     console.log("Pesanan berhasil dibuat:");
     console.table(diperbarui.rows);
   } catch (error) {
@@ -93,7 +85,8 @@ if (!Number.isInteger(penawaranId) || !Number.isInteger(kuantitas) || kuantitas 
       });
     }
     console.error("Pesanan dibatalkan:", error.message);
-    process.exitCode = 1;
+
+process.exitCode = 1;
   } finally {
     client?.release();
     await pool.end();

@@ -10,6 +10,7 @@ if (!Number.isInteger(stokMinimum) || stokMinimum < 0) {
     const koneksi = await pool.query(
       "SELECT current_database() AS database, CURRENT_TIMESTAMP AS waktu"
     );
+
     const hasil = await pool.query(
       `SELECT p.id, p.nama, py.nama_usaha, p.stok, p.harga_penawaran
        FROM penawaran AS p
