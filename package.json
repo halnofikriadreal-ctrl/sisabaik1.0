@@ -27,13 +27,12 @@
     "node": ">=22"
   },
   "dependencies": {
-    "@img/sharp-win32-x64": "^0.35.5",
     "bcryptjs": "3.0.3",
     "express": "5.1.0",
     "express-rate-limit": "8.1.0",
     "helmet": "8.1.0",
     "jsonwebtoken": "9.0.3",
     "pg": "8.16.3",
-    "sharp": "^0.35.5"
+    "sharp": "0.35.5"
   }
 }
